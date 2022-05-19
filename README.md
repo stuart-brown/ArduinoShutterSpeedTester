@@ -63,4 +63,4 @@ Shutter speed, f stop and ISO goal values](https://www.scantips.com/lights/math.
 
 * [Film Camera Tester](https://github.com/srozum/film_camera_tester/wiki) - This one is available as a DIY kit on or assembled from [Tindie](https://www.tindie.com/products/srozum/film-camera-tester/)
 
-* [Speed tester by cameradactyl](https://github.com/cameradactyl/Shutter-Timer) A very similar project to mine :)
+* [Speed tester](https://github.com/cameradactyl/Shutter-Timer) by cameradactyl - A project very similar to this one :)
