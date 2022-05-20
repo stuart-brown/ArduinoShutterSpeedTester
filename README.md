@@ -1,8 +1,8 @@
 # Arduino Shutter Speed Tester
 
 A project to build a shutter speed tester using KY-008 laser diodes, ISO203 Laser Receiver, 0.96" OLED display, all driven by an Arduino Nano.
+This project is setup for VSCode with Platform IO. See https://dronebotworkshop.com/platformio/
 
-<br>
 <br>
 
 ## Status
@@ -21,7 +21,7 @@ This is a work in progress.
 * Display optimisation. 0.96 inch OLED is too small, switch to a bigger display. Better display layout
 * Ability to measure cameras like Barnack Leicas where you cannot access the rear of the shutter curtain.
 * Project documentation. Add references, datasheets and circuit diagrams. Add images to this readme
-* Use interupts. The current software uses a polling loop, which has some, as yet unquantified, delay. using interrupts for the timing measurement can improve this. But the Arduino Nano only supports 2 interrupts. 3 are needed, one for each sensor. Switch to another Arduino that supports more interrupts. 
+* Use interupts. The current software uses a polling loop, which has some, as yet unquantified, delay. using interrupts for the timing measurement can improve this. But the Arduino Nano only supports 2 interrupts. 3 are needed, one for each sensor. Switch to another Arduino that supports more interrupts.
 
 <br>
 <br>
