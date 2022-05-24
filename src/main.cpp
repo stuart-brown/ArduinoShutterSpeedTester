@@ -155,13 +155,13 @@ void setup()
 //            |<------------->|      .       .       .
 //            |   t_1_delta   |      .       .       .
 //        ts_1_start  .   ts_3_start .       .       .
-//                    .       .      .       .       .
-//                    .       .      .       .       .
+//                    .              .       .       .
+//                    .              .       .       .
 //                    |<-------------------->|       .
 //                    |       t_2_delta      |       .
 //              ts_2_start           .   ts_2_end    .
-//                                   .       .       .
-//                                   .       .       .
+//                                   .               .
+//                                   .               .
 //                                   |<------------->|
 //                                   |   t_3_delta   |
 //                                ts_1_end        ts_3_end
@@ -181,6 +181,7 @@ void detector1(void)
   else
   {
     ts_1_start_us = micros();
+    sensor_1_triggered = false;
   }
 }
 
@@ -196,6 +197,7 @@ void detector2(void)
   else
   {
     ts_2_start_us = micros();
+    sensor_2_triggered = false;
   }
 }
 
@@ -209,6 +211,7 @@ void detector3(void)
   else
   {
     ts_3_start_us = micros();
+    sensor_3_triggered = false;
   }
 }
 
@@ -265,9 +268,25 @@ void loop()
   if (sensor_1_triggered && sensor_3_triggered)
   {
     display_refresh = true;
-    curtain_1_travel_time_ms = (double)(ts_3_start_us - ts_1_start_us)/1000.0;
-    curtain_2_travel_time_ms = (double)(ts_3_end_us - ts_1_end_us)/1000.0;
-    
+    // check which is bigger and calculate accordingly
+    // so that travel direction does not matter
+    if (ts_3_start_us > ts_1_start_us)
+    {
+      curtain_1_travel_time_ms = (double)(ts_3_start_us - ts_1_start_us)/1000.0;
+    }
+    else
+    {
+      curtain_1_travel_time_ms = (double)(ts_1_start_us - ts_3_start_us)/1000.0;
+    }
+    if (ts_3_end_us > ts_1_end_us)
+    {
+      curtain_2_travel_time_ms = (double)(ts_3_end_us - ts_1_end_us)/1000.0;
+    }
+    else
+    {
+      curtain_2_travel_time_ms = (double)(ts_1_end_us - ts_3_end_us)/1000.0;
+    }
+   
     Serial.print("Curtain 1 travel time=");
     Serial.print(curtain_1_travel_time_ms,1);
     Serial.println(" ms");
