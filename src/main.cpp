@@ -3,22 +3,29 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <PinChangeInterrupt.h>
 
 #include "version.h"
 
-#define SCREEN_WIDTH 128 // OLED display width, in pixels
-#define SCREEN_HEIGHT 64 // OLED display height, in pixels
+// When turned on all the timestamps are printed to the serial console
+// When turned off only the results of the calculations are printed
+#define FULL_DEBUG 0
 
+#define SCREEN_WIDTH_PIXELS 128 // OLED display width, in pixels
+#define SCREEN_HEIGHT_PIXELS 64 // OLED display height, in pixels
+
+// Font sizes for a single letter
 // Text Size 3 = 18x24 pixels
 // Text Size 2 = 12x16 pixels
 // Text Size 1 = 6x8 pixels
-#define TEXT_SIZE_3_WIDTH 18
-#define TEXT_SIZE_3_HEIGHT 24
-#define TEXT_SIZE_2_WIDTH 12
-#define TEXT_SIZE_2_HEIGHT 16
-#define TEXT_SIZE_1_WIDTH 6
-#define TEXT_SIZE_1_HEIGHT 8
+#define TEXT_SIZE_3_WIDTH_PIXELS  18
+#define TEXT_SIZE_3_HEIGHT_PIXELS 24
+#define TEXT_SIZE_2_WIDTH_PIXELS  12
+#define TEXT_SIZE_2_HEIGHT_PIXELS 16
+#define TEXT_SIZE_1_WIDTH_PIXELS   6
+#define TEXT_SIZE_1_HEIGHT_PIXELS  8
 
+// Prevent the Ada Fruit GFX library from showing an Ada Fruit logo at boot
 #define SSD1306_NO_SPLASH 0
 
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
@@ -26,9 +33,12 @@
 // On an arduino UNO:       A4(SDA), A5(SCL)
 // On an arduino MEGA 2560: 2  0(SDA), 21(SCL)
 // On an arduino LEONARDO:   2(SDA),  3(SCL), ...
-#define OLED_RESET -1       // Reset pin # (or -1 if sharing Arduino reset pin)
-#define SCREEN_ADDRESS 0x3C // See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+#define OLED_RESET 4        // Reset pin # (or -1 if sharing Arduino reset pin)
+#define SCREEN_ADDRESS 0x3C // I2C address for OLED display
+Adafruit_SSD1306 display(SCREEN_WIDTH_PIXELS, SCREEN_HEIGHT_PIXELS, &Wire, OLED_RESET);
+
+// Size of the blank gap between lines of text on the display
+#define GAP_PIXELS 5
 
 #define LASER_1_OUTPUT 5
 #define LASER_2_OUTPUT 6
@@ -38,28 +48,26 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define DETECTOR_2_INPUT 3
 #define DETECTOR_3_INPUT 4
 
-#define DARK 1
-#define LIGHT !DARK
+volatile unsigned long ts_1_start_us = 0;
+volatile unsigned long ts_1_end_us = 0;
+volatile bool sensor_1_triggered = false;
 
-unsigned long ts_1_start_us = 0;
-unsigned long ts_2_start_us = 0;
-unsigned long ts_3_start_us = 0;
-unsigned long ts_1_end_us = 0;
-unsigned long ts_2_end_us = 0;
-unsigned long ts_3_end_us = 0;
+volatile unsigned long ts_2_start_us = 0;
+volatile unsigned long ts_2_end_us = 0;
+volatile bool sensor_2_triggered = false;
 
-int sensor_1_last_read;
-int sensor_2_last_read;
-int sensor_3_last_read;
+volatile unsigned long ts_3_start_us = 0;
+volatile unsigned long ts_3_end_us = 0;
+volatile bool sensor_3_triggered = false;
 
-bool sensor_1_triggered = false;
-bool sensor_2_triggered = false;
-bool sensor_3_triggered = false;
-
-double shutter_speed_us = 0.0;
+double shutter_speed_ms = 0.0;
 double fractional_shutter_speed = 0.0;
-double curtain_1_travel_time_us = 0.0;
-double curtain_2_travel_time_us = 0.0;
+double curtain_1_travel_time_ms = 0.0;
+double curtain_2_travel_time_ms = 0.0;
+
+void detector1(void);
+void detector2(void);
+void detector3(void);
 
 void setup()
 {
@@ -85,17 +93,22 @@ void setup()
     }; // Don't proceed, loop forever
   }
 
+  // No reset line on the display. So clear it and
+  // wait for a short delay to make reboot obvious
   display.clearDisplay();
+  display.display();
+  delay(1); 
+
   display.setTextColor(SSD1306_WHITE);
   display.cp437(true);
   display.setTextWrap(false);
 
   display.setTextSize(3);
-  display.setCursor(TEXT_SIZE_3_WIDTH, (SCREEN_HEIGHT - TEXT_SIZE_3_HEIGHT - TEXT_SIZE_1_HEIGHT) / 2);
+  display.setCursor(TEXT_SIZE_3_WIDTH_PIXELS, (SCREEN_HEIGHT_PIXELS - TEXT_SIZE_3_HEIGHT_PIXELS - TEXT_SIZE_1_HEIGHT_PIXELS) / 2);
   display.print("Ready");
 
   display.setTextSize(1);
-  display.setCursor(0, SCREEN_HEIGHT - TEXT_SIZE_1_HEIGHT);
+  display.setCursor(0, SCREEN_HEIGHT_PIXELS - TEXT_SIZE_1_HEIGHT_PIXELS);
   display.print("v");
   display.print(VERSION_MAJOR);
   display.print(".");
@@ -110,14 +123,10 @@ void setup()
   digitalWrite(LASER_2_OUTPUT, HIGH);
   digitalWrite(LASER_3_OUTPUT, HIGH);
 
-  sensor_1_last_read = digitalRead(DETECTOR_1_INPUT);
-  sensor_2_last_read = digitalRead(DETECTOR_2_INPUT);
-  sensor_3_last_read = digitalRead(DETECTOR_3_INPUT);
-
-  unsigned long ts = micros();
-  ts_1_start_us = ts;
-  ts_2_start_us = ts;
-  ts_3_start_us = ts;
+  // setup interrupts for the laser detectors
+  attachPCINT(digitalPinToPCINT(DETECTOR_1_INPUT), detector1, CHANGE);
+  attachPCINT(digitalPinToPCINT(DETECTOR_2_INPUT), detector2, CHANGE);
+  attachPCINT(digitalPinToPCINT(DETECTOR_3_INPUT), detector3, CHANGE);
 }
 
 //
@@ -161,92 +170,116 @@ void setup()
 //   Curtain 2 travel time = t_3_delta
 //   Shutter speed = t_2_delta
 //
+
+void detector1(void) 
+{
+  if (digitalRead(DETECTOR_1_INPUT))
+  {
+    ts_1_end_us = micros();
+    sensor_1_triggered = true;
+  }
+  else
+  {
+    ts_1_start_us = micros();
+  }
+}
+
+void detector2(void) 
+{
+  int d2 = digitalRead(DETECTOR_2_INPUT);
+  digitalWrite(LED_BUILTIN, d2 ^ 1);
+  if (d2)
+  {
+    ts_2_end_us = micros();
+    sensor_2_triggered = true;   
+  }
+  else
+  {
+    ts_2_start_us = micros();
+  }
+}
+
+void detector3(void) 
+{
+  if (digitalRead(DETECTOR_3_INPUT))
+  {
+    ts_3_end_us = micros();
+    sensor_3_triggered = true;
+  }
+  else
+  {
+    ts_3_start_us = micros();
+  }
+}
+
 void loop()
 {
-  unsigned long read_ts = micros();
-  int sensor_1_read = digitalRead(DETECTOR_1_INPUT);
-  int sensor_2_read = digitalRead(DETECTOR_2_INPUT);
-  int sensor_3_read = digitalRead(DETECTOR_3_INPUT);
-
-  // ----------- Sensor 1 ------------
-  if (sensor_1_last_read == DARK && sensor_1_read == LIGHT)
-  {
-    ts_1_start_us = read_ts;
-  }
-  else if (sensor_1_last_read == LIGHT && sensor_1_read == DARK)
-  {
-    ts_1_end_us = read_ts;
-    sensor_1_triggered = true;
-    Serial.println("Sensor 1 Triggered");
-  }
-  if (sensor_1_read != sensor_1_last_read)
-  {
-    sensor_1_last_read = sensor_1_read;
-  }
-
-  // ----------- Sensor 2 ------------
-  if (sensor_2_last_read == DARK && sensor_2_read == LIGHT)
-  {
-    ts_2_start_us = read_ts;
-  }
-  else if (sensor_2_last_read == LIGHT && sensor_2_read == DARK)
-  {
-    ts_2_end_us = read_ts;
-    sensor_2_triggered = true;
-    Serial.println("Sensor 2 Triggered");
-  }
-  if (sensor_2_read != sensor_2_last_read)
-  {
-    sensor_2_last_read = sensor_2_read;
-  }
-
-  // ----------- Sensor 3 ------------
-  if (sensor_3_last_read == DARK && sensor_3_read == LIGHT)
-  {
-    ts_3_start_us = read_ts;
-  }
-  else if (sensor_3_last_read == LIGHT && sensor_3_read == DARK)
-  {
-    ts_3_end_us = read_ts;
-    sensor_3_triggered = true;
-    Serial.println("Sensor 3 Triggered");
-  }
-  if (sensor_3_read != sensor_3_last_read)
-  {
-    sensor_3_last_read = sensor_3_read;
-  }
-
-  // --------- display ---------
+  // --------- calculate ---------
   bool display_refresh = false;
 
-  // If only sensor 2 is triggered then we are only testing shutter
-  // speed and not curtain travel times
+    #if FULL_DEBUG
+    if (sensor_1_triggered && sensor_3_triggered)
+    {
+      Serial.print("t1_s=");
+      Serial.print(ts_1_start_us);
+      Serial.print("us   t1_e=");
+      Serial.print(ts_1_end_us);
+      Serial.println("us");
+    }
+    if (sensor_2_triggered)
+    {
+      Serial.print("t2_s=");
+      Serial.print(ts_2_start_us);
+      Serial.print("us   t2_e=");
+      Serial.print(ts_2_end_us);
+      Serial.println("us");
+    }
+    if (sensor_1_triggered && sensor_3_triggered)
+    {
+      Serial.print("t3_s=");
+      Serial.print(ts_3_start_us);
+      Serial.print("us   t3_e=");
+      Serial.print(ts_3_end_us);
+      Serial.println("us");
+    }
+    #endif
+
+  // Calculate sensor 2 independant from sensors 1 & 3 so that
+  // a single sensor can be used to measure only shutter speed
+  // or all 3 to measure shutter speed and curtain travel with
+  // out needing a mode change switch
   if (sensor_2_triggered)
   {
-    sensor_2_triggered = false;
     display_refresh = true;
-    shutter_speed_us = (double)(ts_2_end_us - ts_2_start_us);
+    double shutter_speed_us = (double)(ts_2_end_us - ts_2_start_us);
+    shutter_speed_ms = shutter_speed_us / 1000.0;
     fractional_shutter_speed = 1000000.0 / shutter_speed_us;
     Serial.print("Shutter Speed = ");
-    Serial.print(shutter_speed_us / 1000.0, 1);
+    Serial.print(shutter_speed_ms, 1);
     Serial.println(" ms");
     Serial.print("Fractional Shutter Speed = 1/");
     Serial.println(fractional_shutter_speed, 1);
+    Serial.println("---");
+    sensor_2_triggered = false;
   }
   if (sensor_1_triggered && sensor_3_triggered)
   {
-    sensor_1_triggered = false;
-    sensor_3_triggered = false;
     display_refresh = true;
-    curtain_1_travel_time_us = (double)(ts_3_start_us - ts_1_start_us);
-    curtain_2_travel_time_us = (double)(ts_3_end_us - ts_1_end_us);
+    curtain_1_travel_time_ms = (double)(ts_3_start_us - ts_1_start_us)/1000.0;
+    curtain_2_travel_time_ms = (double)(ts_3_end_us - ts_1_end_us)/1000.0;
+    
     Serial.print("Curtain 1 travel time=");
-    Serial.print(curtain_1_travel_time_us / 1000);
+    Serial.print(curtain_1_travel_time_ms,1);
     Serial.println(" ms");
     Serial.print("Curtain 2 travel time=");
-    Serial.print(curtain_2_travel_time_us / 1000);
+    Serial.print(curtain_2_travel_time_ms,1);
     Serial.println(" ms");
+    Serial.println("---");
+    sensor_1_triggered = false;
+    sensor_3_triggered = false;
   }
+
+  // --------- display ---------
   if (display_refresh)
   {
     display.clearDisplay();
@@ -254,27 +287,25 @@ void loop()
     display.setTextSize(2);
 
     display.setCursor(0, 0);
-    display.print(shutter_speed_us / 1000.0, 1);
+    display.print(shutter_speed_ms, 1);
     display.print("ms");
 
-    display.setCursor(0, TEXT_SIZE_2_HEIGHT);
+    display.setCursor(0, TEXT_SIZE_2_HEIGHT_PIXELS + GAP_PIXELS);
     display.print("1/");
     display.print(fractional_shutter_speed, 1);
 
     display.setTextSize(1);
 
-    display.setCursor(0, SCREEN_HEIGHT - TEXT_SIZE_1_HEIGHT - 1);
+    display.setCursor(0, SCREEN_HEIGHT_PIXELS - 2*TEXT_SIZE_1_HEIGHT_PIXELS - GAP_PIXELS);
     display.print("c1:");
-    display.print(curtain_1_travel_time_us / 1000.0, 1);
+    display.print(curtain_1_travel_time_ms, 1);
     display.print("ms");
 
-    display.setCursor(SCREEN_WIDTH / 2, SCREEN_HEIGHT - TEXT_SIZE_1_HEIGHT - 1);
+    display.setCursor(0, SCREEN_HEIGHT_PIXELS - TEXT_SIZE_1_HEIGHT_PIXELS);
     display.print("c2:");
-    display.print(curtain_2_travel_time_us / 1000.0, 1);
+    display.print(curtain_2_travel_time_ms, 1);
     display.print("ms");
 
     display.display();
-
-    Serial.println("---");
   }
 }
