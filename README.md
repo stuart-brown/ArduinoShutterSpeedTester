@@ -3,8 +3,11 @@
 A project to build a shutter speed tester using KY-008 laser diodes, ISO203 Laser Receiver & TFT display, all driven by an Arduino Nano.
 This project is setup for VSCode with Platform IO. See https://dronebotworkshop.com/platformio/
 
-![Laser Diode](Datasheets/KY-008 Laser Diode/LaserDiode.jpg)
-
+<img
+  src="Datasheets/KY-008 Laser Diode/LaserDiode.jpg"
+  alt="Laser Diode"
+  title="Laser Diode"
+  style="display: inline-block; margin: 0 auto; max-width: 300px">
 
 <br>
 
