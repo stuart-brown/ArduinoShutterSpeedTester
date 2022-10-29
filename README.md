@@ -31,6 +31,8 @@ The STM32 calibration device was then use to illuminate the laser receiver on th
 
 The rise and fall times of the laser detector were also checked using the oscilloscope.
 
+Details of the calibration device can be found in the following repo https://github.com/stuart-brown/ShutterSpeedTesterCalibrator
+
 <br>
 <br>
 
