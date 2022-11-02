@@ -4,26 +4,25 @@ A project to build a shutter speed tester using KY-008 laser diodes, ISO203 Lase
 This project is setup for VSCode with Platform IO. See https://dronebotworkshop.com/platformio/
 <br>
 ### Laser Diode
-The laser diode is a 650nm (red) laser, with an output power of 5mW. It can be bought as a standalone component or in module form (KY-008). The documentation says it can operate off of 5V, but reports on the internet say it will burn out quickly and a 39 ohm series resistor is needed to drop the voltage. The module version contains this resistor.
+The laser diode is a 650nm (red) laser, with an output power of 5mW. It can be bought as a standalone component or in module form (KY-008). The documentation says it can operate off of 5V, but reports on the internet say it will burn out quickly and a 39 ohm series resistor is needed to drop the voltage. The module version contains this resistor. This is what it looks like:
 <p align="center">
 <img
   src="Datasheets/KY-008 Laser Diode/LaserDiode.jpg"
   alt="Laser Diode (Standalone)"
   title="Laser Diode (Standalone)"
-  width="100"
-  style="display: inline-block; margin: 0 auto; max-width: 100px">
+  width="200"
+  style="display: inline-block; margin: 0 auto;">
 <img
   src="Datasheets/KY-008 Laser Diode/LaserDiodeModule.jpg"
   alt="Laser Diode (Module)"
   title="Laser Diode (Module)"
-  width="100"
-  style="display: inline-block; margin: 0 auto; max-width: 100px">
+  width="200"
+  style="display: inline-block; margin: 0 auto;">
 </p>
 <br>
 ### ISO203 Laser Receiver
-It was difficult to find information on this component. It can be bought as a laser sensor module, or a standalone laser receiver. The module contains the components needed so you can simply plug it in to your Arduino. If you use the stand alone receiver, a pull-up resistor on the signal leg is needed. Fortunately I came across a good blog post covering this component: https://www.codrey.com/electronic-circuits/the-mysterious-laser-receiver-sensor-module/
-![Laser Receiver](https://github.com/stuart-brown/ArduinoShutterSpeedTester/blob/767102b9e16a1743bec698fca3ab34bbf40097b9/Datasheets/ISO203%20Laser%20Receiver/ISO203-Laser-Receiver.jpg)
-<p align="center">
+It was difficult to find information on this component. It can be bought as a laser sensor module, or a standalone laser receiver. The module contains the components needed so you can simply plug it in to your Arduino. If you use the stand alone receiver, a pull-up resistor on the signal leg is needed. Fortunately I came across a good [blog post](https://www.codrey.com/electronic-circuits/the-mysterious-laser-receiver-sensor-module/) covering this component. This is what it looks like:
+<p align="center"> 
 <img
   src="Datasheets/ISO203 Laser Receiver/ISO203-Laser-Receiver.jpg"
   alt="Laser Receiver"
