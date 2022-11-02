@@ -31,13 +31,13 @@ It was difficult to find information on this component. It can be bought as a la
   src="Datasheets/ISO203 Laser Receiver/ISO203-Laser-Receiver.jpg"
   alt="Laser Receiver"
   title="Laser Receiver"
-  width="100"
+  width="200"
   style="display: inline-block; margin: 0 auto; max-width: 100px">
 <img
   src="Datasheets/ISO203 Laser Receiver/ISO203-Laser-Sensor-Module.jpg"
   alt="Laser Sensor Module"
   title="Laser Sensor Module"
-  width="100"
+  width="200"
   style="display: inline-block; margin: 0 auto; max-width: 100px">
 </p> 
 
