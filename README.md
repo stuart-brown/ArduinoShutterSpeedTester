@@ -1,12 +1,11 @@
 # Arduino Shutter Speed Tester
 
-A project to build a shutter speed tester using KY-008 laser diodes, ISO203 Laser Receiver & TFT display, all driven by an Arduino Nano.
-This project is setup for VSCode with Platform IO. See https://dronebotworkshop.com/platformio/
+A project to build a shutter speed tester using KY-008 laser diodes, ISO203 Laser Receiver & TFT display, all driven by an [Arduino Nano](https://docs.arduino.cc/hardware/nano). The code was developed in [VSCode](https://code.visualstudio.com/) using [Platform IO](https://platformio.org/). 
 <br>
 
 
 ### Laser Diode
-The laser diode is a 650nm (red) laser, with an output power of 5mW. It can be bought as a standalone component or in module form (KY-008). The documentation says it can operate off of 5V, but reports on the internet say it will burn out quickly and a 39 ohm series resistor is needed to drop the voltage. The module version contains this resistor. This is what it looks like:
+The [KY-008 laser diode](https://arduinomodules.info/ky-008-laser-transmitter-module/) is a 650nm (red) laser, with an output power of 5mW. It can be bought as a standalone component or in module form (KY-008). The documentation says it can operate off of 5V, but reports on the internet say it will burn out quickly and a 39 ohm series resistor is needed to drop the voltage. The module version contains this resistor. This is what it looks like:
 <p align="center">
 <img
   src="Datasheets/KY-008 Laser Diode/LaserDiode.jpg"
@@ -25,7 +24,7 @@ The laser diode is a 650nm (red) laser, with an output power of 5mW. It can be b
 
 
 ### ISO203 Laser Receiver
-It was difficult to find information on this component. It can be bought as a laser sensor module, or a standalone laser receiver. The module contains the components needed so you can simply plug it in to your Arduino. If you use the stand alone receiver, a pull-up resistor on the signal leg is needed. Fortunately I came across a good [blog post](https://www.codrey.com/electronic-circuits/the-mysterious-laser-receiver-sensor-module/) covering this component. This is what it looks like:
+It was difficult to find information on this component, but fortunately I came across a good [blog post](https://www.codrey.com/electronic-circuits/the-mysterious-laser-receiver-sensor-module/) covering it. It can be bought as a laser sensor module, or a standalone laser receiver. The module contains the components needed so you can simply plug it in to your Arduino. If you use the stand alone receiver, a pull-up resistor on the signal leg is needed.  This is what it looks like:
 <p align="center"> 
 <img
   src="Datasheets/ISO203 Laser Receiver/ISO203-Laser-Receiver.jpg"
@@ -49,21 +48,27 @@ This is a work in progress.
 
 
 ### What works:
-* SMeasurement of shutter speeds & curtain travel times.
-* Display shutter speeds as fractions and corresponding time measurements
-* Display of curtain travel times
+* Measurement of shutter speeds & curtain travel times using 3 lasers and sensors
+* Display time measurements & corresponding fractional shutter speeds  
+* Display curtain travel times for 1st & 2nd curtain
 * Calibration check
 
 
 ### To do:
+* More content in this Readme
 * Ability to measure cameras like Barnack Leicas where you cannot access the rear of the shutter curtain.
 * Finish project documentation: references, datasheets, circuit diagrams, etc. 
 * Add images to this readme
 <br>
 
+# Getting Going
+* Download and setup VSCode and PlatformIO. See https://dronebotworkshop.com/platformio/
+* Open the project in VSCode
+* Build using PlatformIO
+<br>
 
 # Calibration
-Calibration was done using a calibration device consisting of a STM32 Nucleo-F303RE development board driving a KY-008 laser diode. This produced light pulses of varying widths, the width of the pulse can be changed by pressing the 'user' button on the dev board. The width of the ON pulses was measured using a digital storage oscilloscope to confirm their accuracy.
+Calibration was done using a calibration device consisting of a STM32 Nucleo-F303RE development board driving a KY-008 laser diode. This pulses the laser at regular intervals, the width of the pulse can be changed by pressing the 'user' button on the dev board. The width of the ON pulses was measured using a digital storage oscilloscope to confirm their accuracy.
 
 The STM32 calibration device was then use to illuminate the laser receiver on the shutter speed tester to check that the tester measured and displayed the correct time.
 
