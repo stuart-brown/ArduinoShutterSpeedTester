@@ -3,6 +3,8 @@
 A project to build a shutter speed tester using KY-008 laser diodes, ISO203 Laser Receiver & TFT display, all driven by an Arduino Nano.
 This project is setup for VSCode with Platform IO. See https://dronebotworkshop.com/platformio/
 <br>
+
+
 ### Laser Diode
 The laser diode is a 650nm (red) laser, with an output power of 5mW. It can be bought as a standalone component or in module form (KY-008). The documentation says it can operate off of 5V, but reports on the internet say it will burn out quickly and a 39 ohm series resistor is needed to drop the voltage. The module version contains this resistor. This is what it looks like:
 <p align="center">
@@ -20,6 +22,8 @@ The laser diode is a 650nm (red) laser, with an output power of 5mW. It can be b
   style="display: inline-block; margin: 0 auto;">
 </p>
 <br>
+
+
 ### ISO203 Laser Receiver
 It was difficult to find information on this component. It can be bought as a laser sensor module, or a standalone laser receiver. The module contains the components needed so you can simply plug it in to your Arduino. If you use the stand alone receiver, a pull-up resistor on the signal leg is needed. Fortunately I came across a good [blog post](https://www.codrey.com/electronic-circuits/the-mysterious-laser-receiver-sensor-module/) covering this component. This is what it looks like:
 <p align="center"> 
@@ -39,6 +43,7 @@ It was difficult to find information on this component. It can be bought as a la
 
 <br>
 
+
 ## Status
 This is a work in progress.
 
@@ -54,9 +59,8 @@ This is a work in progress.
 * Ability to measure cameras like Barnack Leicas where you cannot access the rear of the shutter curtain.
 * Finish project documentation: references, datasheets, circuit diagrams, etc. 
 * Add images to this readme
+<br>
 
-<br>
-<br>
 
 # Calibration
 Calibration was done using a calibration device consisting of a STM32 Nucleo-F303RE development board driving a KY-008 laser diode. This produced light pulses of varying widths, the width of the pulse can be changed by pressing the 'user' button on the dev board. The width of the ON pulses was measured using a digital storage oscilloscope to confirm their accuracy.
@@ -67,7 +71,6 @@ The rise and fall times of the laser detector were also checked using the oscill
 
 Details of the calibration device can be found in the following repo https://github.com/stuart-brown/ShutterSpeedTesterCalibrator
 
-<br>
 <br>
 
 # References and Interesting Reading:
