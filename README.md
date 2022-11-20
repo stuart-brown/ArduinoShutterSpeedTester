@@ -4,6 +4,30 @@ A project to build a shutter speed tester using KY-008 laser diodes, ISO203 Lase
 <br>
 
 
+## Status
+This is a work in progress.
+<br>
+
+
+### To do:
+* More content in this Readme
+* Ability to measure cameras like Barnack Leicas where you cannot access the rear of the shutter curtain.
+* Finish project documentation: references, datasheets, circuit diagrams, etc. 
+<br>
+
+
+### Wiring Diagram
+<p align="center">
+<img
+  src="WiringDiagram/WiringDiagram.png"
+  alt="Wiring Diagram"
+  title="Wiring Diagram"
+  width="600"
+  style="display: inline-block; margin: 0 auto;">
+</p>
+<br>
+
+
 ### Laser Diode
 The [KY-008 laser diode](https://arduinomodules.info/ky-008-laser-transmitter-module/) is a 650nm (red) laser, with an output power of 5mW. It can be bought as a standalone component or in module form (KY-008). The documentation says it can operate off of 5V, but reports on the internet say it will burn out quickly and a 39 ohm series resistor is needed to drop the voltage. The module version contains this resistor. This is what it looks like:
 <p align="center">
@@ -43,23 +67,13 @@ It was difficult to find information on this component, but fortunately I came a
 <br>
 
 
-## Status
-This is a work in progress.
-
-
 ### What works:
 * Measurement of shutter speeds & curtain travel times using 3 lasers and sensors
 * Display time measurements & corresponding fractional shutter speeds  
 * Display curtain travel times for 1st & 2nd curtain
 * Calibration check
-
-
-### To do:
-* More content in this Readme
-* Ability to measure cameras like Barnack Leicas where you cannot access the rear of the shutter curtain.
-* Finish project documentation: references, datasheets, circuit diagrams, etc. 
-* Add images to this readme
 <br>
+
 
 # Getting Going
 * Download and setup VSCode and PlatformIO. See https://dronebotworkshop.com/platformio/
