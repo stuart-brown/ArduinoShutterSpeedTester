@@ -28,6 +28,19 @@ This is a work in progress.
 <br>
 
 
+### Arduino Nano
+The heart of the system is an Arduino Nano.
+<p align="center">
+<img
+  src="Datasheets/Arduino Nano/ArduinoNano-3.0.png"
+  alt="Arduino Nano"
+  title="Arduino Nano"
+  width="200"
+  style="display: inline-block; margin: 0 auto;">
+</p> 
+<br>
+
+
 ### Laser Diode
 The [KY-008 laser diode](https://arduinomodules.info/ky-008-laser-transmitter-module/) is a 650nm (red) laser, with an output power of 5mW. It can be bought as a standalone component or in module form (KY-008). The documentation says it can operate off of 5V, but reports on the internet say it will burn out quickly and a 39 ohm series resistor is needed to drop the voltage. The module version contains this resistor. This is what it looks like:
 <p align="center">
@@ -63,9 +76,61 @@ It was difficult to find information on this component, but fortunately I came a
   width="200"
   style="display: inline-block; margin: 0 auto; max-width: 100px">
 </p> 
-
 <br>
 
+
+### LiPo Charger / Voltage Regulator Module
+This module charges the LiPo battery and provides a constant regulated voltage to the Arduino and other electronics.
+<p align="center">
+<img
+  src="Datasheets/Charger Module/Li-ion-Charger-Board.png"
+  alt="LiPo Module"
+  title="LiPo Module"
+  width="200"
+  style="display: inline-block; margin: 0 auto;">
+</p> 
+<br>
+
+### TXS0108E 8 Channel Level Shifter
+The Arduino uses 5V logic levels, but the TFT display requires 3.3V levels. A level shifter is needed between the Arduino and the TFT display.
+<p align="center">
+<img
+  src="Datasheets/TXS0108E 8 Channel Bi-Directional Logic Level Converter/TXS0108E_ 8_Channel_Level_Converter.png"
+  alt="TXS0108E Level Shifter"
+  title="TXS0108E Level Shifter"
+  width="200"
+  style="display: inline-block; margin: 0 auto;">
+</p> 
+<br>
+
+
+### TFT LCD Display
+<p align="center">
+<img
+  src="Datasheets/2.2 TFT LCD/TFT LCD Display.jpg"
+  alt="TFT LCD Display"
+  title="TFT LCD Display"
+  width="200"
+  style="display: inline-block; margin: 0 auto;">
+</p> 
+<br>
+
+
+### Other components
+<p align="center">
+<img
+  src="Datasheets/Other/Switch.jpg"
+  alt="Switch"
+  title="Switch"
+  width="200"
+  style="display: inline-block; margin: 0 auto;">
+<img
+  src="Datasheets/Other/Usb_3.1_Type-c_Socket-2.png"
+  alt="USB Power Socket"
+  title="USB Power Socket"
+  width="200"
+  style="display: inline-block; margin: 0 auto;">
+<br>
 
 ### What works:
 * Measurement of shutter speeds & curtain travel times using 3 lasers and sensors
@@ -73,6 +138,7 @@ It was difficult to find information on this component, but fortunately I came a
 * Display curtain travel times for 1st & 2nd curtain
 * Calibration check
 <br>
+
 
 
 # Getting Going
