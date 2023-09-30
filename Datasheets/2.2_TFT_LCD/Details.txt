@@ -1,0 +1,5 @@
+2.2 inch SPI serial screen with backplane module, at least only 5 IO drivers are required
+Screen size: 2.2 inch SPI serial bus
+Resolution: 240 * 320
+Driver IC: ILI9341
+
