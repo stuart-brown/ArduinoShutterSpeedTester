@@ -152,7 +152,7 @@ Rocker switch, USB charge connector and a 550mAh 13400 battery recovered from a 
 ## Mechanicals
 The mechanical build is based on a Pangor M42 macro bellows, paired with 3D printed parts. The design could be adjusted to work with any bellows. 
 
-The bellows was disassembled to remove the expanding bellows and only the rail and end housings were used. This forms the chassis to which the 3D printed parts attach. There are two housings attached, one at either end of the chassis. There is one for the laser detectors and electronics, and another for the laser diodes. Both the laser diode and laser sensor housings are circular and can be rotted to allow the sensors and lasers to be aligned. Using a macro bellows as the chassis provides a stable platform that makes sensor and diode alignment easy and keeps them aligned when sliding further apart or closer together to accommodate different cameras.
+The bellows was disassembled to remove the expanding bellows and only the rail and end housings were used. This forms the chassis to which the 3D printed parts attach. There are two housings attached, one at either end of the chassis. There is one for the laser detectors and electronics, and another for the laser diodes. Both the laser diode and laser sensor housings are circular and can be rotated to allow the sensors and lasers to be aligned. Using a macro bellows as the chassis provides a stable platform that makes sensor and diode alignment easy and keeps them aligned when sliding further apart or closer together to accommodate different cameras.
 
 The laser detectors are kept close to the electronics to minimise the chances of false detects due to noise. 
 
