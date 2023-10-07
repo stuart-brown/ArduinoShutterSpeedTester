@@ -281,7 +281,7 @@ The macro bellows has two thumb screws, one on each side (red arrows in image be
   style="display: inline-block;vertical-align: middle;"></div>
 <br>
 
-Version 2 of the housing corrected the issues with the first design and added a battery meter. 
+Version 2 of the housing corrected the issues with the first design and added a battery meter and some small improvements. 
 
 Version 2 also has some problems that will be corrected in the next version: 
  1) The display was designed to be adjustable, this turned out to be not necessary and just added complication.
@@ -308,7 +308,7 @@ The battery meter turned out to be much larger than anticipated and the bottom h
 
 
 #### Laser Diodes
-The laser diodes are now housed in a ball joint, with each ball clamped down by a small rectangular block. This allow each laser to be adjusted and aimed at the corresponding laser sensor individually.
+The laser diodes are now housed in a ball joint, with each ball clamped down by a small rectangular block. This allow each laser to be adjusted and aimed at the corresponding laser sensor individually. The knot in the cable has been replaced by a proper cable strain relief block that clamps the cable.
 
 <div style="text-align: center;">
 <img
@@ -399,7 +399,7 @@ Shutter speed, f stop and ISO goal values](https://www.scantips.com/lights/math.
 
 * [Laser Shutter Tester](https://community.element14.com/challenges-projects/project14/makingtime/b/blog/posts/laser-shutter-tester)
 
-* [VFMOTO camera shutter tester](https://www.ebay.com/itm/154737256704) - A commercial product sold on EBay
+* [VFMOTO camera shutter tester](https://www.ebay.com/usr/vfmoto) - A commercial product sold on EBay
 
 * [Film Camera Tester](https://github.com/srozum/film_camera_tester/wiki) - This one is available as a DIY kit on or assembled from [Tindie](https://www.tindie.com/products/srozum/film-camera-tester/)
 
