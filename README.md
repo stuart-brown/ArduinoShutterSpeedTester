@@ -3,6 +3,15 @@
 A project to build a shutter speed tester using KY-008 laser diodes, ISO203 Laser Receiver & TFT display, all driven by an [Arduino Nano](https://docs.arduino.cc/hardware/nano). The code was developed in [VSCode](https://code.visualstudio.com/) using [Platform IO](https://platformio.org/). 
 <br>
 
+<div style="text-align: center;">
+<img
+  src="images/ShutterSpeedTester_500x500.jpg"
+  alt="Shutter Speed Tester"
+  title="Shutter Speed Tester"
+  height="400"
+  style="display: inline-block;vertical-align: middle;">
+</div>
+
 
 ## Status
 This is a work in progress.
@@ -44,7 +53,7 @@ The heart of the system is an Arduino Nano.
   src="Datasheets/Arduino_Nano/ArduinoNano-3.0.png"
   alt="Arduino Nano"
   title="Arduino Nano"
-  height="200"
+  height="300"
   style="display: inline-block;vertical-align: middle;">
 </div> 
 
@@ -57,7 +66,7 @@ The [KY-008 laser diode](https://arduinomodules.info/ky-008-laser-transmitter-mo
   src="Datasheets/KY-008_Laser_Diode/LaserDiode.jpg"
   alt="Laser Diode (Standalone)"
   title="Laser Diode (Standalone)"
-  height="200"
+  height="300"
   style="display: inline-block;vertical-align: middle;">
 <img
   src="Datasheets/KY-008_Laser_Diode/LaserDiodeModule.jpg"
@@ -72,17 +81,23 @@ The [KY-008 laser diode](https://arduinomodules.info/ky-008-laser-transmitter-mo
 It was difficult to find information on this component, but fortunately I came across a good [blog post](https://www.codrey.com/electronic-circuits/the-mysterious-laser-receiver-sensor-module/) covering it. It can be bought as a laser sensor module, or a standalone laser receiver. The module contains the components needed so you can simply plug it in to your Arduino. If you use the stand alone receiver, a pull-up resistor on the signal leg is needed.  This is what it looks like:
 <div style="text-align: center;"> 
 <img
-  src="Datasheets/ISO203_Laser_Receiver/ISO203-Laser-Receiver.jpg"
-  alt="Laser Receiver"
-  title="Laser Receiver"
-  height="200"
-  style="display: inline-block;vertical-align: middle; max-width: 100px">
-<img
   src="Datasheets/ISO203_Laser_Receiver/ISO203-Laser-Sensor-Module.jpg"
   alt="Laser Sensor Module"
   title="Laser Sensor Module"
   height="200"
-  style="display: inline-block;vertical-align: middle; max-width: 100px">
+  style="display: inline-block;vertical-align: middle;">
+ <img
+  src="Datasheets/ISO203_Laser_Receiver/ISO203-Laser-Receiver.jpg"
+  alt="Laser Receiver"
+  title="Laser Receiver"
+  height="200"
+  style="display: inline-block;vertical-align: middle;">
+<img
+  src="Datasheets/ISO203_Laser_Receiver/ISO203-Laser-Receiver-Mechnical.jpg"
+  alt="Laser Sensor Module"
+  title="Laser Sensor Module"
+  height="200"
+  style="display: inline-block;vertical-align: middle;">
 </div> 
 
 
@@ -109,22 +124,41 @@ The Arduino uses 5V logic levels, but the TFT display requires 3.3V levels. A le
   style="display: inline-block;vertical-align: middle;">
 </div> 
 
+### Display
+The project started with a small 0.96 inch OLED display. But it was too small, so it was replaced by a larger TFT LCD.
 
-### TFT LCD Display
-The designed used a 2.2 inch TFT display with 240x320 resolution, but the size in not important, a smaller or larger one could be used as long as the resolution is the same.
+##### 0.96" OLED 
+ The code for the OLED display is still in the code base, it can be enabled by changing the line `#define USE_OLED 0` to `#define USE_OLED 1`. The OLED uses the i2c interface, and this is not shown on the wiring diagram.
+<div style="text-align: center;">
+<img
+  src="Datasheets/0.96_inch_OLED/OLED-Display-Module-128X64.jpg"
+  alt="Small OLED Display"
+  title="Small OLED Display"
+  height="200"
+  style="display: inline-block;vertical-align: middle;">
+  <img
+  src="Datasheets/0.96_inch_OLED/OLE-Display-Module-128X64-back.jpg"
+  alt="Small OLED Display"
+  title="Small OLED Display"
+  height="200"
+  style="display: inline-block;vertical-align: middle;">
+</div> 
+
+##### TFT LCD Display
+The tester was built using a 2.2 inch TFT display with 240x320 resolution and ILI9341 driver chip. A smaller or larger display could be used as long as the resolution and driver are the same. The display used had a SD Card slot on the back, this was was not used.
 <div style="text-align: center;">
 <img
   src="Datasheets/2.2_TFT_LCD/TFT_LCD_Display.jpg"
   alt="TFT LCD Display"
   title="TFT LCD Display"
-  height="200"
+  height="300"
   style="display: inline-block;vertical-align: middle;">
 </div> 
 <br>
 
 
 ### Other components
-Rocker switch, USB charge connector and a 550mAh 13400 battery recovered from a disposed vape.
+Rocker switch, USB charge connector and a 550mAh 13400 battery recovered from a disposed vape. The second version added a battery indicator and normally open momentary push button to connect it to the battery to show the battery level.
 <div style="text-align: center;">
 <img
   src="Datasheets/Other/Switch.jpg"
@@ -140,12 +174,31 @@ Rocker switch, USB charge connector and a 550mAh 13400 battery recovered from a 
   style="display: inline-block;vertical-align: middle;">
 <img
   src="Datasheets/Other/18400_battery.jpg"
-  alt="Battery"
-  title="Battery"
+  alt="18400 Battery"
+  title="18400 Battery"
   height="100"
   style="display: inline-block;vertical-align: middle;">
 </div>
-
+<div style="text-align: center;">
+<img
+  src="Datasheets/BatteryIndicator/Lithium-Battery-Capacity-Indicator.jpg"
+  alt="Battery Indicator"
+  title="Battery Indicator"
+  height="200"
+  style="display: inline-block;vertical-align: middle;">
+<img
+  src="Datasheets/BatteryIndicator/Lithium-Battery-Capacity-Indicator-back.jpg"
+  alt="Battery Indicator"
+  title="Battery Indicator"
+  height="200"
+  style="display: inline-block;vertical-align: middle;">
+<img
+  src="Datasheets/Other/Momentary-Push-Button-NO.jpg"
+  alt="NO Momentary Push Button"
+  title="NO Momentary Push Button"
+  height="100"
+  style="display: inline-block;vertical-align: middle;">
+</div>
 
 <br>
 
@@ -262,13 +315,13 @@ The display and electronics are housed in a box that mounts to the laser detecto
 
 
 #### Alignment
-The macro bellows has two thumb screws, one on each side (red arrows in image below). The laser detector housing has a 3D printed "dimple" in the circular ring at the "12 o'clock" position that the thumb screw screws into to align it and stop it rotating. The laser diode holder does not have any "dimples", it can be rotated to align the laser diodes and sensors, then the thumb screw is screwed down to hold it in place.  
+The macro bellows has two thumb screws, one on each side (red arrows in image below). The laser detector housing has a 3D printed "dimple" in the circular ring at the "12 o'clock" position that the thumb screw screws into to align it and stop it rotating. The laser diode holder does not have any "dimples", it can be rotated to align the laser diodes and sensors (yellow arrow in image below), then the thumb screw is screwed down to hold it in place.  
 
 <div style="text-align: center;"><img
   src="images/Version1/20221106_162254+162300_ON1-annotated.jpg"
   alt="Alignment"
   title="Alignment"
-  height="200"
+  height="300"
   style="display: inline-block;vertical-align: middle;"></div>
 
 
@@ -281,7 +334,7 @@ The macro bellows has two thumb screws, one on each side (red arrows in image be
   style="display: inline-block;vertical-align: middle;"></div>
 <br>
 
-Version 2 of the housing corrected the issues with the first design and added a battery meter and some small improvements. 
+Version 2 of the housing corrected the issues with the first design and added a battery meter and some small improvements. A 3D printed foot was also added for stability. 
 
 Version 2 also has some problems that will be corrected in the next version: 
  1) The display was designed to be adjustable, this turned out to be not necessary and just added complication.
@@ -344,13 +397,23 @@ A shallow cone screws onto the front of the laser detector housing. The camera l
 
 <div style="text-align: center;">
 <img
-  src="images/Version2/20230206_150818.jpg"
+  src="images/Version2/20231007_151908.jpg"
   alt="Battery meter"
   title="Battery meter"
   height="200"
   style="display: inline-block;vertical-align: middle;">
 </div>
 
+#### Foot
+A 3D printed foot is bolted onto the tripod mount on the bottom of the bellows housing to improve stability.
+<div style="text-align: center;">
+<img
+  src="images/Version2/20230206_150650.jpg"
+  alt="Battery meter"
+  title="Battery meter"
+  height="200"
+  style="display: inline-block;vertical-align: middle;">
+</div>
 <br>
 
 
